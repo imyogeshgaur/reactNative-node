@@ -4,27 +4,27 @@ import authentication from "../middleware/authentication.middleware";
 
 const userRouter = Router();
 
-userRouter.get("/details",authentication,( req:Request, res:Response) => {
+userRouter.get("/details", authentication, (req: Request, res: Response) => {
     try {
-        const userController = new UserController(req,res);
+        const userController = new UserController(req, res);
         userController.getUserDetails();
     } catch (error) {
         console.log("Global Error !!!", error)
     }
 })
 
-userRouter.put("/update",authentication,( req:Request, res:Response) => {
+userRouter.put("/update", authentication, (req: Request, res: Response) => {
     try {
-        const userController = new UserController(req,res);
+        const userController = new UserController(req, res);
         userController.updateUser();
     } catch (error) {
         console.log("Global Error !!!", error)
     }
 })
 
-userRouter.delete("/delete",authentication,( req:Request, res:Response) => {
+userRouter.delete("/delete", authentication, (req: Request, res: Response) => {
     try {
-        const userController = new UserController(req,res);
+        const userController = new UserController(req, res);
         userController.deleteUser();
     } catch (error) {
         console.log("Global Error !!!", error)
@@ -33,36 +33,36 @@ userRouter.delete("/delete",authentication,( req:Request, res:Response) => {
 
 //! Authentication Routes 
 
-userRouter.post("/signup", ( req:Request, res:Response) => {
+userRouter.post("/signup", (req: Request, res: Response) => {
     try {
-        const userController = new UserController(req,res);
+        const userController = new UserController(req, res);
         userController.signUpUser();
     } catch (error) {
         console.log("Global Error !!!", error)
     }
 })
 
-userRouter.post("/login", ( req:Request, res:Response) => {
+userRouter.post("/login", (req: Request, res: Response) => {
     try {
-        const userController = new UserController(req,res);
+        const userController = new UserController(req, res);
         userController.loginUser();
     } catch (error) {
         console.log("Global Error !!!", error)
     }
 })
 
-userRouter.post("/forgetPass", ( req:Request, res:Response) => {
+userRouter.post("/forgetPass", (req: Request, res: Response) => {
     try {
-        const userController = new UserController(req,res);
+        const userController = new UserController(req, res);
         userController.forgetPassword();
     } catch (error) {
         console.log("Global Error !!!", error)
     }
 })
 
-userRouter.post("/resetPass/:token", ( req:Request, res:Response) => {
+userRouter.post("/resetPass/:token", (req: Request, res: Response) => {
     try {
-        const userController = new UserController(req,res);
+        const userController = new UserController(req, res);
         userController.resetPassword();
     } catch (error) {
         console.log("Global Error !!!", error)

@@ -1,5 +1,4 @@
 import { Response, Request } from "express";
-import { mailToForgetPassword } from "../helper/mail.helper";
 import UserService from "../services/user.service";
 
 class UserController {
@@ -15,8 +14,12 @@ class UserController {
     async getUserDetails() {
         try {
             const token: any = this.req.headers.authorization;
-            const user = this.service.getUserDetails(token);
-            return this.res.status(200).send(user);
+            const user = await this.service.getUserDetails(token);
+            if (user === null) {
+                return this.res.status(200).send({ message: "No User Found !!!" });
+            } else {
+                return this.res.status(200).send({ user });
+            }
         } catch (error) {
             console.log("Error in Controller : ", error);
             return this.res.status(500).send({ message: "Internal Server Error !!!" })
@@ -24,8 +27,14 @@ class UserController {
     }
     async updateUser() {
         try {
-            const update = this.service.updateUser();
-            console.log(update);
+            const token: any = this.req.headers.authorization;
+            const data = this.req.body;
+            const update: any = await this.service.updateUser(data, token);
+            if (update === 0) {
+                return this.res.status(200).send({ message: "Details not Updated !!!" })
+            } else {
+                return this.res.status(200).send({ message: "Details Updated !!!" })
+            }
         } catch (error) {
             console.log("Error in Controller : ", error);
             return this.res.status(500).send({ message: "Internal Server Error !!!" })
@@ -34,8 +43,13 @@ class UserController {
 
     async deleteUser() {
         try {
-            const deleted = this.service.deleteUser();
-            console.log(deleted);
+            const token: any = this.req.headers.authorization;
+            const deleted: any = await this.service.deleteUser(token);
+            if (deleted === 0) {
+                return this.res.status(200).send({ message: "User not Deleted !!!" })
+            } else {
+                return this.res.status(200).send({ message: "User Deleted !!!" })
+            }
         } catch (error) {
             console.log("Error in Controller : ", error);
             return this.res.status(500).send({ message: "Internal Server Error !!!" })
@@ -90,7 +104,7 @@ class UserController {
             const token: any = this.req.params.token;
             const message = await this.service.resetPassword(data, token);
             if (message === 0) {
-                return this.res.status(200).send({ message: "Password do not updated !!!" })
+                return this.res.status(200).send({ message: "Password do not Updated !!!" })
             } else {
                 return this.res.status(200).send({ message: "Password Updated !!!" })
             }

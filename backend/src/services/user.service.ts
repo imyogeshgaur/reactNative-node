@@ -6,30 +6,58 @@ import { sign } from "jsonwebtoken";
 import { resolve } from "path"
 import { config } from "dotenv"
 import { mailToForgetPassword } from "../helper/mail.helper";
+
 config({ path: resolve("src/.env") })
 
 class UserService {
 
     async getUserDetails(token: any) {
         try {
-            const data = decodeUser(token)
-            console.log(data);
+            const userId = decodeUser(token)
+            const userToFind = await User.findOne({
+                where: {
+                    userId
+                }
+            })
+            return userToFind;
         } catch (error) {
             console.log("Error in Service : ", error);
         }
     }
 
-    async updateUser() {
+    async updateUser(data: any, token: any) {
         try {
-
+            const userId = decodeUser(token);
+            const isExist = await User.findOne({
+                where: {
+                    userId
+                }
+            })
+            if (isExist) {
+                const userToUpdate = await isExist.update(data)
+                return userToUpdate;
+            } else {
+                return 0;
+            }
         } catch (error) {
             console.log("Error in Service : ", error);
         }
     }
 
-    async deleteUser() {
+    async deleteUser(token: any) {
         try {
-
+            const userId = decodeUser(token);
+            const isExist = await User.findOne({
+                where: {
+                    userId
+                }
+            })
+            if (isExist) {
+                const userToDelete = await isExist.destroy();
+                return userToDelete;
+            } else {
+                return 0;
+            }
         } catch (error) {
             console.log("Error in Service : ", error);
         }
@@ -140,7 +168,7 @@ class UserService {
                     password: newPassword
                 }, {
                     where: {
-                        userId:decodedVal
+                        userId: decodedVal
                     }
                 })
                 return update;

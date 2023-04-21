@@ -13,6 +13,6 @@ app.use(cors({
 
 connectWithDB();
 
-app.use("/user",userRouter)
+app.use("/user", userRouter)
 
 app.listen(3000)
